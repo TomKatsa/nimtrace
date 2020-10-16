@@ -7,8 +7,8 @@ method hit* (this: hittable, r: ray, t_min: float, t_max: float, rec: var hit_re
 
 
 proc set_face_normal* (rec: var hit_record, r: ray, out_normal: vec3) =
-    var front_face = dot(r.direction, out_normal) < 0
-    if front_face:
+    rec.front_face = dot(r.direction, out_normal) < 0
+    if rec.front_face:
         rec.normal = out_normal
     else:
         rec.normal = -out_normal

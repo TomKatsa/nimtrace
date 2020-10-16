@@ -29,3 +29,6 @@ proc ray_color* (r: ray, world: seq[hittable], depth: int): color =
     var light_blue: color = (0.5, 0.7, 1.0)
     var t = 0.5*(unit_dir.y + 1.0)
     return ( (1.0 - t)*white + t*light_blue )
+
+
+
