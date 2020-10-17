@@ -1,4 +1,4 @@
-import common, math
+import common, math, utility
 
 
 proc clamp(x: float, mini: float, maxi: float): float =
@@ -19,3 +19,8 @@ proc write_color*(fileobj: File, c: color, samples: int) =
     var b = int(clamp(z, 0.0, 0.999)*256)
     fileobj.writeLine(r, ' ', g, ' ', b)
 
+proc randcolor*: color =
+    return (rand_float(), rand_float(), rand_float())
+
+proc randcolor* (mini: float, maxi: float): color =
+    return (rand_range(mini, maxi), rand_range(mini, maxi), rand_range(mini, maxi))
