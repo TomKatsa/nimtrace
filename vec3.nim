@@ -66,14 +66,7 @@ proc randomvec*: vec3 =
     var r = sqrt(1 - z*z)
     return (r*cos(a), r*sin(a), z)
 
-proc refract*(uv: vec3, n: vec3, refraction_ratio: float): vec3 =
-    var cos_theta = dot(-uv, n)
-    var r_out_perp =  refraction_ratio * (uv + cos_theta*n)
-    var r_out_parallel = -sqrt(abs(1.0 - r_out_perp.len_squared())) * n
-    return r_out_perp + r_out_parallel
 
-proc reflect* (v: vec3, n:vec3): vec3 =
-    return (v - 2*dot(v,n)*n)
 
 
 

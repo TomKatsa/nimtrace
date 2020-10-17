@@ -6,3 +6,6 @@ proc deg_to_rad* (deg: float): float =
 
 proc rand_range* (mini: float, maxi: float): float =
     return (mini + (maxi-mini)*rand(1.0))
+
+proc rand_float*: float =
+    return rand(1.0)

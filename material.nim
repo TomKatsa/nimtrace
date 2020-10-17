@@ -1,4 +1,4 @@
-import vec3, common
+import vec3, common, math, random, optics
 
 
 
@@ -38,7 +38,17 @@ method scatter*(de: dielectric, r:ray, rec: hit_record, attenuation: var color, 
     else:
         refraction_ratio = de.refraction_index
     var unit_direction: vec3 = unit_vector(r.direction)
-    var refracted: vec3 = refract(unit_direction, rec.normal, refraction_ratio)
-    scattered = ray(origin: rec.p, direction: refracted)
+
+    var cos_theta = min(dot(-unit_direction, rec.normal), 1.0)
+    var sin_theta = sqrt(1.0 - cos_theta*cos_theta)
+    var cannot_refract = refraction_ratio * sin_theta > 1.0
+    var direction: vec3
+
+    if cannot_refract or reflectance(cos_theta, refraction_ratio) > rand(1.0):
+        direction = reflect(unit_direction, rec.normal)
+    else:
+        direction = refract(unit_direction, rec.normal, refraction_ratio)
+
+    scattered = ray(origin: rec.p, direction: direction)
     return true
     
