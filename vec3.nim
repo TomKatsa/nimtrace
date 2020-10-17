@@ -76,6 +76,14 @@ proc reflect* (v: vec3, n:vec3): vec3 =
     return (v - 2*dot(v,n)*n)
 
 
+proc reflectance* (cosine: float, ref_idx: float): float =
+            # Use Schlick's approximation for reflectance.
+            var r0 = (1-ref_idx) / (1+ref_idx)
+            r0 = r0*r0
+            return r0 + (1-r0)*pow((1 - cosine),5)
+        
+
+
 
 #[
 proc random_in_unit_sphere*: vec3 =
