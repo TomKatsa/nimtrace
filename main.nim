@@ -1,20 +1,21 @@
-import common, color, vec3, ray, times, random, camera, scene
+import common, color, vec3, ray, times, random, camera, scene, utility
 
 # Image
 const aspect_ratio = 3.0 / 2.0
-const width = 1200
+const width = 200
 const height = int(width / aspect_ratio)
-const samples_per_pixel = 100
+const samples_per_pixel = 50
 const depth = 50
 
 # Camera
 var cam: camera
+# For static camera:
 #cam.init_cam((0.0, 0.0, 0.0), (0.0, 0.0, -1.0), (0.0, 1.0, 0.0),90, 16/9)
-cam.init_cam((13.0, 2.0, 3.0), (0.0, 0.0, 0.0), (0.0, 1.0, 0.0),20 , aspect_ratio)
+#cam.init_cam((13.0, 2.0, 3.0), (0.0, 0.0, 0.0), (0.0, 1.0, 0.0),20 , aspect_ratio)
 
 
 
-const filename = "image.ppm"
+var filename = "image"
 
 
 
@@ -23,8 +24,7 @@ proc write_header(fileobj: File) =
 
 
 
-proc generate_img(fileobj: File) =
-    var world = random_scene()
+proc generate_img(fileobj: File, world: seq[hittable]) =
 
     #var ground: material = lambertian(albedo: (0.0, 0.6, 0.0))
     #var blue: material = lambertian(albedo: (0.3, 0.3, 0.7))
@@ -56,6 +56,20 @@ echo "Image dimensions: ", width, "x", height
 echo "----------------"
 
 
-let fileobj = open(filename, fmWrite)
-write_header(fileobj)
-generate_img(fileobj)
+
+let world = random_scene()
+
+
+for angle in countup(0, 360, 4):
+    let fileobj = open(filename & $angle & ".ppm", fmWrite)
+    # Dynamic moving camera
+    # Generating 360/4 = 90 different images for every 4th angle
+    # Camera at height of 2.0, looking at (0, 0, 0), radius of the camera circle is 13.342
+    cam.init_cam_angle(deg_to_rad(float(angle)), 13.342, 2.0, (0.0,0.0,0.0), (0.0,1.0,0.0), 20, aspect_ratio)
+    write_header(fileobj)
+    fileobj.generate_img(world)
+    close(fileobj)
+    echo "File ", angle, " done"
+
+
+

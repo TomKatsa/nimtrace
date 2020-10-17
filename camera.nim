@@ -22,3 +22,11 @@ proc init_cam*(cam: var camera, lookfrom: point, lookat: point, vup: vec3 , vfov
 
 proc get_ray*(cam: camera, s: float, t: float): ray =
     return ray(origin: cam.origin, direction: cam.lower_left_corner + s*cam.horizontal + t*cam.vertical - cam.origin)
+
+
+proc init_cam_angle*(cam: var camera, angle: float, radius: float, height: float, lookat: point, vup: vec3, vfov: float, aspect_ratio: float) =
+    var x = radius * cos(angle)
+    var y = height
+    var z = radius * sin(angle)
+    echo "x = ", x, " y = ", y, " z = ", z
+    cam.init_cam((x, y, z), lookat, vup, vfov, aspect_ratio)
